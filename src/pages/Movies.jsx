@@ -1,13 +1,8 @@
 import { fetchFilms } from 'api/fetchApi';
 import SearchForm from 'components/SearchForm/SearchForm';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useState } from 'react';
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 const Movies = () => {
   const [currentMovies, setCurrentMovies] = useState([]);
@@ -15,19 +10,19 @@ const Movies = () => {
   const queryParam = searchParams.get('query') ?? '';
   const location = useLocation();
 
-  const navigate = useNavigate();
-
-  const onSubmit = ({ queryParam }) => {
-    console.log(queryParam);
-    fetchFilms(queryParam)
-      .then(resp => {
-        setCurrentMovies(resp.data.results);
-        navigate(`?query=${queryParam}`);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  const onSubmit = useCallback(async queryParam => {
+    if (!queryParam) {
+      return;
+    } else {
+      fetchFilms(queryParam)
+        .then(resp => {
+          setCurrentMovies(resp.data.results);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }, []);
 
   const updateQueryString = query => {
     const nextParams = query !== '' ? { query } : {};
@@ -35,20 +30,12 @@ const Movies = () => {
   };
 
   useEffect(() => {
-    if (queryParam === '') {
-      return;
-    } else {
-      onSubmit({ queryParam });
-    }
-  }, []);
+    onSubmit(queryParam);
+  }, [onSubmit, queryParam]);
 
   return (
     <main>
-      <SearchForm
-        onSubmit={onSubmit}
-        queryParam={queryParam}
-        onChange={updateQueryString}
-      />
+      <SearchForm onSubmit={updateQueryString} />
 
       <ul>
         {currentMovies &&

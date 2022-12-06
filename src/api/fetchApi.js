@@ -3,31 +3,31 @@ import { API_KEY } from './apiKey';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 
-export const fetchFilms = query => {
+export const fetchFilms = async query => {
   return axios.get(
     `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`
   );
 };
 
-export const getPopularFilms = () => {
+export const getPopularFilms = async () => {
   return axios.get(`${BASE_URL}/trending/movie/day?api_key=${API_KEY}`);
 };
 
-export const getMovieDetails = filmId => {
+export const getMovieDetails = async filmId => {
   return axios.get(`${BASE_URL}/movie/${filmId}?api_key=${API_KEY}`);
 };
 
-export const getMovieCredits = filmId => {
+export const getMovieCredits = async filmId => {
   return axios.get(
     `${BASE_URL}/movie/${filmId}/credits?api_key=${API_KEY}&language=en-US`
   );
 };
 
-export const getMovieReviews = filmId => {
+export const getMovieReviews = async filmId => {
   return axios.get(`${BASE_URL}/movie/${filmId}/reviews?api_key=${API_KEY}`);
 };
 
-export const getGenres = () => {
+export const getGenres = async () => {
   return axios.get(
     `${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=en-US`
   );

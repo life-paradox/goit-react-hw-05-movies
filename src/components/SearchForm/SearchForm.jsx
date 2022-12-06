@@ -1,14 +1,17 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-const SearchForm = ({ onSubmit, queryParam, onChange }) => {
+const SearchForm = ({ onSubmit }) => {
+  const [currentQuery, setCurrentQuery] = useState();
+
+  const handleInput = e => {
+    setCurrentQuery(e.target.value);
+  };
+
   const submitHandler = event => {
     event.preventDefault();
 
-    if (queryParam.length <= 0) {
-      return;
-    }
-
-    onSubmit({ queryParam });
+    onSubmit(currentQuery);
   };
 
   return (
@@ -18,8 +21,8 @@ const SearchForm = ({ onSubmit, queryParam, onChange }) => {
         autoComplete="off"
         autoFocus
         placeholder="Search movie by title"
-        onChange={e => onChange(e.target.value)}
-        value={queryParam}
+        onChange={handleInput}
+        value={currentQuery}
       />
       <button type="submit">
         <span>Search</span>
