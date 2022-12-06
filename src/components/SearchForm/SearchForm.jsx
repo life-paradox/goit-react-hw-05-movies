@@ -35,6 +35,4 @@ export default SearchForm;
 
 SearchForm.propTypes = {
   onSubmit: PropTypes.func,
-  queryParam: PropTypes.string,
-  onChange: PropTypes.func,
 };
